@@ -1,8 +1,8 @@
 package com.elgunsh.courseerpbackend.filters;
 
-import com.elgunsh.courseerpbackend.model.mybatis.user.User;
+import com.elgunsh.courseerpbackend.service.getters.EmailGetter;
 import com.elgunsh.courseerpbackend.service.security.AccessTokenManager;
-import com.elgunsh.courseerpbackend.service.user.UserService;
+import com.elgunsh.courseerpbackend.service.security.AuthBusinessService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -17,46 +17,37 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Objects;
+
+import static com.elgunsh.courseerpbackend.constants.TokenConstants.EMAIL_KEY;
+import static com.elgunsh.courseerpbackend.constants.TokenConstants.TOKEN_PREFIX;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Component
 @RequiredArgsConstructor
-public class AuthorizationFilter extends OncePerRequestFilter {
+public class AuthorizationFilter extends OncePerRequestFilter implements EmailGetter {
     private final AccessTokenManager accessTokenManager;
-    private final UserDetailsService userDetailsService;
+    private final AuthBusinessService authBusinessService;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        String bearerToken = request.getHeader("Authorization");
+        String bearerToken = request.getHeader(AUTHORIZATION);
 
-        System.out.println(bearerToken);
-
-        if (Objects.nonNull(bearerToken) && bearerToken.startsWith("Bearer")) {
+        if (Objects.nonNull(bearerToken) && bearerToken.startsWith(TOKEN_PREFIX)) {
             final String token = bearerToken.split(" ")[1].trim();
 
-            Claims claims = accessTokenManager.read(token);
-            String email = claims.get("email", String.class);
-
-            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-
-            SecurityContextHolder.getContext().setAuthentication(
-                    new UsernamePasswordAuthenticationToken(
-                            userDetails,
-                            "",
-                            userDetails.getAuthorities()
-                    )
-            );
-
-            System.out.println(token);
-
+            authBusinessService.setAuthentication(getEmailFromToken(token));
         }
 
 
 
         filterChain.doFilter(request, response);
-//
-//        System.out.println("after doFilter" + count++);
 
+    }
+
+    @Override
+    public String getEmailFromToken(String token) {
+        Claims claims = accessTokenManager.read(token);
+        return claims.get(EMAIL_KEY, String.class);
     }
 }

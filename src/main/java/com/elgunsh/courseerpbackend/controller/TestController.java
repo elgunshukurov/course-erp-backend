@@ -1,5 +1,6 @@
 package com.elgunsh.courseerpbackend.controller;
 
+import com.elgunsh.courseerpbackend.exception.BaseException;
 import com.elgunsh.courseerpbackend.model.base.BaseResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +24,9 @@ public class TestController {
     }
     @GetMapping("/test/no-auth")
     public static BaseResponse<String> testNoAuth(){
-        return BaseResponse.success("test data for no auth");
+
+        throw BaseException.unexpected();
+
+//        return BaseResponse.success("test data for no auth");
     }
 }

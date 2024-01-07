@@ -10,4 +10,8 @@ public interface AuthBusinessService {
     LoginResponse login(LoginPayload loginPayload);
 
    LoginResponse refresh(RefreshTokenPayload refreshTokenPayload);
+
+    void logout();
+
+    void setAuthentication(String email);
 }

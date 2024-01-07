@@ -5,6 +5,7 @@ import com.elgunsh.courseerpbackend.model.mybatis.user.User;
 import com.elgunsh.courseerpbackend.model.property.security.SecurityProperties;
 import com.elgunsh.courseerpbackend.service.base.TokenGenerator;
 import com.elgunsh.courseerpbackend.service.base.TokenReader;
+import com.elgunsh.courseerpbackend.service.getters.EmailGetter;
 import com.elgunsh.courseerpbackend.utils.PublicPrivateKeyUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -20,7 +21,8 @@ import static com.elgunsh.courseerpbackend.constants.TokenConstants.*;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class RefreshTokenManager implements TokenGenerator<RefreshTokenDto>, TokenReader<Claims> {
+public class RefreshTokenManager implements TokenGenerator<RefreshTokenDto>,
+        TokenReader<Claims>, EmailGetter {
 
     private final SecurityProperties securityProperties;
 
@@ -60,5 +62,11 @@ public class RefreshTokenManager implements TokenGenerator<RefreshTokenDto>, Tok
         }
 
         return tokenData;
+    }
+
+    @Override
+    public String getEmailFromToken(String token) {
+        Claims claims = read(token);
+        return claims.get(EMAIL_KEY, String.class);
     }
 }
