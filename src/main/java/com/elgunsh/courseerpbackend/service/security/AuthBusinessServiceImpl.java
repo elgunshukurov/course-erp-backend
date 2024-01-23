@@ -4,6 +4,7 @@ import com.elgunsh.courseerpbackend.model.dto.RefreshTokenDto;
 import com.elgunsh.courseerpbackend.model.mybatis.user.User;
 import com.elgunsh.courseerpbackend.model.payload.auth.LoginPayload;
 import com.elgunsh.courseerpbackend.model.payload.auth.RefreshTokenPayload;
+import com.elgunsh.courseerpbackend.model.payload.auth.signUp.SignUpPayload;
 import com.elgunsh.courseerpbackend.model.response.auth.LoginResponse;
 import com.elgunsh.courseerpbackend.service.getters.EmailGetter;
 import com.elgunsh.courseerpbackend.service.user.UserService;
@@ -63,6 +64,14 @@ public class AuthBusinessServiceImpl implements AuthBusinessService{
                         userDetails.getAuthorities()
                 )
         );
+    }
+
+    @Override
+    public Void signUp(SignUpPayload payload) {
+
+
+
+        return null;
     }
 
     //private util methods

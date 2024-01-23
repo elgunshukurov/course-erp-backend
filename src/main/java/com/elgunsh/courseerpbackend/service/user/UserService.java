@@ -8,4 +8,6 @@ public interface UserService {
 
     void insert(User user);
 
+    boolean checkByEmail(String email);
+
 }

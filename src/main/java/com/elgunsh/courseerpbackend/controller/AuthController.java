@@ -3,6 +3,7 @@ package com.elgunsh.courseerpbackend.controller;
 import com.elgunsh.courseerpbackend.model.base.BaseResponse;
 import com.elgunsh.courseerpbackend.model.payload.auth.LoginPayload;
 import com.elgunsh.courseerpbackend.model.payload.auth.RefreshTokenPayload;
+import com.elgunsh.courseerpbackend.model.payload.auth.signUp.SignUpPayload;
 import com.elgunsh.courseerpbackend.model.response.auth.LoginResponse;
 import com.elgunsh.courseerpbackend.service.security.AuthBusinessService;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,11 @@ public class AuthController {
     public BaseResponse<Void> logout(){
         authBusinessService.logout();
         return BaseResponse.success();
+    }
+
+    @PostMapping("/sign-up")
+    public BaseResponse<Void> signUp(@RequestBody SignUpPayload payload) {
+        return BaseResponse.success(authBusinessService.signUp(payload));
     }
 
 }
