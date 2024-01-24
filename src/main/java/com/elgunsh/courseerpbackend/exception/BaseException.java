@@ -22,6 +22,10 @@ public class BaseException extends RuntimeException{
     ResponseMessages responseMessages;
     NotFoundExceptionType notFoundExceptionData;
 
+    public static BaseException of(ResponseMessages responseMessages){
+        return BaseException.builder().responseMessages(responseMessages).build();
+    }
+
     public static BaseException unexpected() {
         return BaseException.builder()
                 .responseMessages(UNEXPECTED)

@@ -69,7 +69,9 @@ public class AuthBusinessServiceImpl implements AuthBusinessService{
     @Override
     public Void signUp(SignUpPayload payload) {
 
+        if (userService.checkByEmail(payload.getEmail())) {
 
+        }
 
         return null;
     }
